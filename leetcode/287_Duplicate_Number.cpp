@@ -6,7 +6,7 @@ class Solution
 public:
     int findDuplicate(vector<int>& nums)
     {                    
-        int start = 1, end = nums.size();
+        int start = 1, end = nums.size() - 1;
         int mid;
 
         while (start < end)
@@ -18,7 +18,7 @@ public:
             }
             else
             {
-                start = end + 1;
+                start = mid + 1;
             }
         }
         return start;
@@ -36,3 +36,14 @@ private:
         return res > end - start + 1;
     }
 };
+
+int main()
+{
+    vector<int> nums;
+    nums.push_back(1);
+    nums.push_back(2);
+    nums.push_back(2);
+    
+    Solution sln;
+    printf("%d\n", sln.findDuplicate(nums));
+}
