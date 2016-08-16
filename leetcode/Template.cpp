@@ -1,9 +1,22 @@
 #include <iostream>
 #include <vector>
 #include <bitset>
-
+#include <queue>
 
 using namespace std;
+
+struct Entry {
+    int x, y;
+    int val;
+};
+
+struct Comparator {
+    bool operator()(const Entry& e1, const Entry& e2)
+    {
+        return e1.val > e2.val;
+    }
+};
+// priority_queue<Entry, vector<Entry>, Comparator> Q;
 
 class Solution {
 public:
