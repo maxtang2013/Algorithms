@@ -1,5 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <functional>
+#include <numeric>
 
 using namespace std;
 
@@ -40,6 +43,30 @@ public:
         ans.push_back(num2);
         return ans;
     }
+    
+    vector<int> singleNumber2(vector<int>& nums)
+    {
+        // Pass 1 :
+        // Get the XOR of the two numbers we need to find
+        int diff = accumulate(nums.begin(), nums.end(), 0, bit_xor<int>());
+        // Get its last set bit
+        diff &= -diff;
+        
+        // Pass 2 :
+        vector<int> rets = {0, 0}; // this vector stores the two numbers we will return
+        for (int num : nums)
+        {
+            if ((num & diff) == 0) // the bit is not set
+            {
+                rets[0] ^= num;
+            }
+            else // the bit is set
+            {
+                rets[1] ^= num;
+            }
+        }
+        return rets;
+    }
 };
 
 template<typename T>
@@ -52,6 +79,31 @@ void printVector(const vector<T>& list)
         if (i < len - 1) std::cout << " ";
         else std::cout << "\n";
     }
+}
+
+int getLastBit(int n)
+{
+//    Equavilent:
+//    for (i = 0; i < 32; ++i)
+//    {
+//        if (bits & mask)
+//        {
+//            break;
+//        }
+//        mask = mask << 1;
+//    }
+    
+    return n & (-n);
+}
+
+void printBits(int n)
+{
+    for (int i = 31; i >= 0; --i)
+    {
+        if (n & (1<<i)) std::cout << "1";
+        else std::cout << "0";
+    }
+    std::cout << "\n";
 }
 
 int main()
@@ -67,6 +119,14 @@ int main()
     nums.push_back(4);
     
     printVector<int>(sln.singleNumber(nums));
+    
+    printf("%d\n", 1&(-1));
+    printf("%d\n", 2&(-2));
+    printf("%d\n", 3&(-3));
+    printf("%d\n", 4&(-4));
+    
+    printBits(-1);
+    printBits(-3);
     
     return 0;
 }
