@@ -1,13 +1,13 @@
 #include <iostream>
 #include <vector>
+#include <bitset>
+
 
 using namespace std;
 
 class Solution {
 public:
-    int singleNumber(vector<int>& nums) {
-        
-    }
+
 };
 
 template<typename T>
@@ -25,26 +25,31 @@ void printVector(const vector<T>& list)
 int getLastBit(int n)
 {
     //    Equavilent:
+    //    int mask = 0;
     //    for (i = 0; i < 32; ++i)
     //    {
+    //        mask = 1 << i;
     //        if (bits & mask)
     //        {
     //            break;
     //        }
-    //        mask = mask << 1;
     //    }
+    //    return mask;
     
     return n & (-n);
 }
 
 void printBits(int n)
 {
-    for (int i = 31; i >= 0; --i)
-    {
-        if (n & (1<<i)) std::cout << "1";
-        else std::cout << "0";
-    }
-    std::cout << "\n";
+//    for (int i = 31; i >= 0; --i)
+//    {
+//        if (n & (1<<i)) std::cout << "1";
+//        else std::cout << "0";
+//    }
+//    std::cout << "\n";
+    
+    std::bitset<32> bits(n);
+    std::cout << bits << "\n";
 }
 
 int countBits(int n)
