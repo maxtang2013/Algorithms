@@ -90,6 +90,30 @@ public:
         }
         return ans;
     }
+    
+    // 144.   
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<TreeNode*> stack;
+        TreeNode *n = NULL;
+        vector<int> ans;
+        
+        if (root == NULL) return ans;
+        
+        stack.push_back(root);
+        while (!stack.empty())
+        {
+            n = stack.back();
+            stack.pop_back();
+            ans.push_back(n->val);
+            
+            if (n->right != NULL)
+                stack.push_back(n->right);
+            
+            if (n->left != NULL)
+                stack.push_back(n->left);
+        }
+        return ans;
+    }
 };
 
 template<typename T>
