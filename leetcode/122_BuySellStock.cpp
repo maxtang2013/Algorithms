@@ -23,6 +23,8 @@ public:
     int maxProfit(vector<int>& prices) {
         int n = (int) prices.size();
         int i, j;
+        int profit = 0;
+        int buy, sell;
 //        vector<int> maxProfit(n+1, 0);
 //        
 //        for (i = 2; i <= n; ++i)
@@ -35,8 +37,7 @@ public:
 //            }
 //        }
         
-        int profit = 0;
-        int buy = prices[0], sell = buy;
+        buy = prices[0], sell = buy;
         for (i = 1; i < n; ++i)
         {
             if (prices[i] < sell)
