@@ -36,69 +36,69 @@ public:
         
         mNums = nums;
         sort (mNums.begin(), mNums.end());
+        mLargest = mNums[n-1];
         
         vector<int> quadruplet(4, 0);
         
-        int i1, i2, i3, i4;
-        int remain = target;
-        int hi = mNums[n-1];
+//        int i1, i2, i3, i4;
+//        int remain = target;
+//
+//        for (i1 = 0; i1 < n - 3; )
+//        {
+//            int val1 = mNums[i1];
+//            
+//            if ((mLargest << 2) < remain || (val1 << 2) > remain)
+//                break;
+//            
+//            remain -= val1;
+//            
+//            for (i2 = i1 + 1; i2 < n - 2; )
+//            {
+//                int val2 = mNums[i2];
+//                
+//                if (mLargest * 3 < remain || val2 * 3 > remain) break;
+//                
+//                remain -= val2;
+//                
+//                for (i3 = i2 + 1; i3 < n - 1; )
+//                {
+//                    int val3 = mNums[i3];
+//                    
+//                    if ( (mLargest<<1) < remain || (val3<<1) > remain) break;
+//                    
+//                    remain -= val3;
+//                    
+//                    for (i4 = i3 + 1; i4 < n; )
+//                    {
+//                        int val4 = mNums[i4];
+//                        
+//                        if (val4 > remain || mLargest < remain) break;
+//                        
+//                        if (val4 == remain)
+//                        {
+//                            quadruplet[0] = val1;
+//                            quadruplet[1] = val2;
+//                            quadruplet[2] = val3;
+//                            quadruplet[3] = val4;
+//                            
+//                            mResult.push_back(quadruplet);
+//                        }
+//                        
+//                        PASS_SAME_ELEMENT(i4, mNums, val4, n);
+//                    }
+//                    PASS_SAME_ELEMENT(i3, mNums, val3, n);
+//                    remain += val3;
+//                }
+//                
+//                PASS_SAME_ELEMENT(i2, mNums, val2, n);
+//                remain += val2;
+//            }
+//            
+//            PASS_SAME_ELEMENT(i1, mNums, val1, n);
+//            remain += val1;
+//        }
         
-        for (i1 = 0; i1 < n - 3; )
-        {
-            int val1 = mNums[i1];
-            
-            if ((hi << 2) < remain || (val1 << 2) > remain)
-                break;
-            
-            remain -= val1;
-            
-            for (i2 = i1 + 1; i2 < n - 2; )
-            {
-                int val2 = mNums[i2];
-                
-                if (hi * 3 < remain || val2 * 3 > remain) break;
-                
-                remain -= val2;
-                
-                for (i3 = i2 + 1; i3 < n - 1; )
-                {
-                    int val3 = mNums[i3];
-                    
-                    if ( (hi<<1) < remain || (val3<<1) > remain) break;
-                    
-                    remain -= val3;
-                    
-                    for (i4 = i3 + 1; i4 < n; )
-                    {
-                        int val4 = mNums[i4];
-                        
-                        if (val4 > remain || hi < remain) break;
-                        
-                        if (val4 == remain)
-                        {
-                            quadruplet[0] = val1;
-                            quadruplet[1] = val2;
-                            quadruplet[2] = val3;
-                            quadruplet[3] = val4;
-                            
-                            mResult.push_back(quadruplet);
-                        }
-                        
-                        PASS_SAME_ELEMENT(i4, mNums, val4, n);
-                    }
-                    PASS_SAME_ELEMENT(i3, mNums, val3, n);
-                    remain += val3;
-                }
-                
-                PASS_SAME_ELEMENT(i2, mNums, val2, n);
-                remain += val2;
-            }
-            
-            PASS_SAME_ELEMENT(i1, mNums, val1, n);
-            remain += val1;
-        }
-        
-        // traverse(quadruplet, n, 0, 4, target);
+        traverse(quadruplet, n, 0, 4, target);
         
         return mResult;
     }
@@ -107,13 +107,14 @@ private:
     {
         if (k > n - i) return;
         
-        if (target > k * mNums[n - 1] || target < k * mNums[0])
+        if (target > k * mLargest || target < k * mNums[i])
             return;
         
-        if (k == 0)
+        if (k == 1)
         {
-            if (target == 0)
+            if (std::binary_search(mNums.begin(), mNums.end(), target))
             {
+                quadruplet[0] = target;
                 mResult.push_back(quadruplet);
             }
             return;
@@ -135,6 +136,7 @@ private:
     vector<vector<int>> mResult;
     vector<int> mNums;
     int mTarget;
+    int mLargest;
 };
 
 template<typename T>
