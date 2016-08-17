@@ -14,7 +14,7 @@ struct TreeNode {
 
 class Solution {
 public:
-    vector<int> inorderTraversal(TreeNode* root) {
+    vector<int> inorderTraversal1(TreeNode* root) {
         vector<int> ans;
         vector<TreeNode*> stack;
         TreeNode* node = NULL;
@@ -63,6 +63,31 @@ public:
             prev = node;
         }
         
+        return ans;
+    }
+    
+    
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<TreeNode*> stack;
+        TreeNode *n = root;
+        vector<int> ans;
+        
+        while (n != NULL || !stack.empty())
+        {
+            if (n != NULL)
+            {
+                stack.push_back(n);
+                n = n->left;
+            }
+            else
+            {
+                n = stack.back();
+                stack.pop_back();
+                ans.push_back(n->val);
+                
+                n = n->right;
+            }
+        }
         return ans;
     }
 };
