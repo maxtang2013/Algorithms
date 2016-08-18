@@ -31,21 +31,18 @@ public:
         map<int, int> visited;
         int k = 1;
         
-        int decimal = (int)( N / D );
+        long long decimal = N / D;
         N = N % D;
         
         while (N > 0)
         {
-            if (visited[N])
+            if (visited[(int)N])
             {
-                int j = visited[N];
-                // TODO:
-                // 0.031324(124324)
-                // 0.01(1)
+                int j = visited[(int)N];
                 
                 string s1 = fraction.substr(0, j-1);
                 string s2 = fraction.substr(j-1);
-                int i1 = s1.length() - 1, i2 = s2.length() - 1;
+                int i1 = (int)s1.length() - 1, i2 = (int)s2.length() - 1;
                 while (i1 >= 0 && i2 >= 0 && s1[i1] == s2[i2])
                 {
                     --i1; --i2;
@@ -58,7 +55,7 @@ public:
                 break;
             }
             
-            visited[N] = k;
+            visited[(int)N] = k;
             int i = 0;
             while (N < D)
             {
@@ -70,31 +67,26 @@ public:
                 }
             }
             
-            int x = N / D;
+            int x = (int)(N / D);
             fraction.append(1, (char)(x + '0'));
             ++k;
             
             N = N % D;
         }
+        
         string ans;
         char num[36];
         
-        if (fraction.length() == 0)
-        {
-            if (sign == -1)
-                sprintf(num, "-%d", decimal);
-            else
-                sprintf(num, "%d", decimal);
-        }
-        else
-        {
+        sprintf(num, "%lld", decimal);
         
-        if (sign == -1)
-            sprintf(num, "-%d.", decimal);
-        else
-            sprintf(num, "%d.", decimal);
+        if (sign == -1) ans = "-";
+        ans += decimal;
+        
+        if (fraction.length() > 0){
+            ans += ".";
+            ans += decimal;
         }
-        ans = num + fraction;
+        
         return ans;
     }
 };
@@ -162,18 +154,25 @@ void Test9()
                                   90) << endl;
 }
 
+void Test10()
+{
+    Solution sln;
+    cout << sln.fractionToDecimal(-2147483648, 1) << endl;
+}
+
 int main()
 {
-    Test0();
-    Test1();
-    Test2();
-    Test3();
-    Test4();
-    Test5();
-    Test6();
-    Test7();
-    Test8();
-    Test9();
+//    Test0();
+//    Test1();
+//    Test2();
+//    Test3();
+//    Test4();
+//    Test5();
+//    Test6();
+//    Test7();
+//    Test8();
+//    Test9();
+    Test10();
     
     return 0;
 }
