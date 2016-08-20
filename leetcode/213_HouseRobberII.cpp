@@ -20,7 +20,33 @@ struct Comparator {
 
 class Solution {
 public:
-
+    int rob(vector<int> nums)
+    {
+        int n = nums.size();
+        if (n == 0) return 0;
+        if (n == 1) return nums[0];
+        int max0 = 0, max1 = nums[1];
+        int m1;
+        for (int i = 2; i < n; ++i)
+        {
+            int maxcnt = max(max0 + nums[i], max1);
+            max0 = max1;
+            max1 = maxcnt;
+        }
+        
+        m1 = max1;
+        max0 = 0, max1 = nums[0];
+        for (int i = 1; i < n - 1; ++i)
+        {
+            int maxcnt = max(max0 + nums[i], max1);
+            max0 = max1;
+            max1 = maxcnt;
+        }
+        
+        m1 = max(m1, max1);
+        
+        return m1;
+    }
 };
 
 template<typename T>

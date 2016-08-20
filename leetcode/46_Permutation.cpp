@@ -20,7 +20,43 @@ struct Comparator {
 
 class Solution {
 public:
-
+    vector<vector<int>> permute(vector<int>& nums) {
+        int n = nums.size();
+        mNums = nums;
+        mRow.assign(n, 0);
+        mAns.clear();
+        mUsd.assign(n, 0);
+        
+        perm(n, 0);
+        
+        return mAns;
+    }
+    
+private:
+    
+    void perm(int n, int k)
+    {
+        if (k == n)
+        {
+            mAns.push_back(mRow);
+            return;
+        }
+        for (int i = 0; i < n; ++i)
+        {
+            if (!mUsd[i])
+            {
+                mUsd[i] = 1;
+                mRow[k] = mNums[i];
+                perm(n, k + 1);
+                mUsd[i] = 0;
+            }
+        }
+    }
+    
+    vector<int> mRow;
+    vector<int> mUsd;
+    vector<int> mNums;
+    vector<vector<int>> mAns;
 };
 
 template<typename T>
@@ -79,6 +115,17 @@ int countBits(int n)
 void Test0()
 {
     Solution sln;
+    
+    vector<int> nums = {1, 4, 5};
+    vector<vector<int>> ans = sln.permute(nums);
+    for (int i = 0; i < ans.size(); ++i)
+    {
+        for (int j = 0; j < nums.size(); ++j)
+        {
+            cout << ans[i][j] << " ";
+        }
+        cout << endl;
+    }
 }
 
 int main()

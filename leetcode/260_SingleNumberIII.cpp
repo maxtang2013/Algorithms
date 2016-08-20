@@ -128,5 +128,12 @@ int main()
     printBits(-1);
     printBits(-3);
     
+    int x = 1 << 30;
+    bitset<32> bits(x);
+    std::cout << bits << std::endl;
+    x = x << 1;
+    std::cout << x << std::endl;
+    std::cout << bitset<32>(x) << std::endl;
+    
     return 0;
 }

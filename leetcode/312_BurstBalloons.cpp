@@ -20,7 +20,44 @@ struct Comparator {
 
 class Solution {
 public:
-
+    int maxCoins(vector<int>& nums) {
+        
+        if (nums.empty()) return 0;
+        
+        mNums.push_back(1);
+        mNums.insert(mNums.end(), nums.begin(), nums.end());
+        mNums.end();
+        mNums.push_back(1);
+        mN = mNums.size();
+        
+        mMaxVal.resize(mN);
+        for (int i = 0; i < mN; ++i)
+        {
+            mMaxVal[i].assign(mN, -1);
+        }
+        
+        return maxCoins(0, mN - 1);
+    }
+private:
+    int maxCoins(int left, int right)
+    {
+        if (left + 1 == right) return 0;
+        
+        if (mMaxVal[left][right] > -1)
+            return mMaxVal[left][right];
+        
+        int val = -1;
+        for (int i = left+1; i < right; ++i)
+        {
+            val = max(val, mNums[left] * mNums[i] * mNums[right] + maxCoins(left, i) + maxCoins(i, right));
+        }
+        return mMaxVal[left][right] = val;
+    }
+    
+private:
+    vector<int> mNums;
+    int mN;
+    vector<vector<int>> mMaxVal;
 };
 
 template<typename T>
@@ -79,6 +116,8 @@ int countBits(int n)
 void Test0()
 {
     Solution sln;
+    vector<int> nums = {3,1,5,8};
+    printf("%d\n", sln.maxCoins(nums));
 }
 
 int main()

@@ -2,6 +2,7 @@
 #include <vector>
 #include <bitset>
 #include <queue>
+#include <cmath>
 
 using namespace std;
 
@@ -20,7 +21,25 @@ struct Comparator {
 
 class Solution {
 public:
-
+    bool isPerfectSquare(int num) {
+        int low = 1, hi = 46341;
+        
+        while (low < hi) {
+            int mid = (low + hi) / 2;
+            if (mid * mid > num) {
+                hi = mid - 1;
+            } else if ( mid * mid == num ){
+                return true;
+            } else {
+                low = mid + 1;
+            }
+        }
+        
+        if (low * low == num || (low - 1) * (low - 1) == num)
+            return true;
+        
+        return false;
+    }
 };
 
 template<typename T>
@@ -79,11 +98,14 @@ int countBits(int n)
 void Test0()
 {
     Solution sln;
+    printf("%d\n", sln.isPerfectSquare(2147395600));
 }
 
 int main()
 {
     Test0();
+    cout << 46340 * 46340 << endl;
+    cout << sqrt(INT_MAX) << endl;
     
     return 0;
 }

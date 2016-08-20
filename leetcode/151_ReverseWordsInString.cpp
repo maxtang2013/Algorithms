@@ -20,7 +20,26 @@ struct Comparator {
 
 class Solution {
 public:
-
+    void reverseWords(string &s) {
+        int n = (int)s.length();
+        int i, j, k;
+        
+        for (i = 0; i < n; ++i)
+        {
+            char t = s[i];
+            s[i] = s[n - 1 - i];
+            s[n - 1 - i] = t;
+        }
+        
+        j = k = 0;
+        for (i = 0; i < n; ++i)
+        {
+            if (i > 0 && isspace(s[i]) && )
+            {
+                
+            }
+        }
+    }
 };
 
 template<typename T>

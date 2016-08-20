@@ -5,23 +5,46 @@
 
 using namespace std;
 
-struct Entry {
-    int x, y;
+struct TreeNode {
     int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-struct Comparator {
-    bool operator()(const Entry& e1, const Entry& e2)
-    {
-        return e1.val > e2.val;
-    }
-};
-// priority_queue<Entry, vector<Entry>, Comparator> Q;
-
-class Solution {
+class BSTIterator {
 public:
-
+    BSTIterator(TreeNode *root) {
+        mCurrentNode = root;
+    }
+    
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !mStack.empty() || mCurrentNode != NULL;
+    }
+    
+    /** @return the next smallest number */
+    int next() {
+        int val = 0;
+        while (hasNext()) {
+            if (mCurrentNode != NULL) {
+                mStack.push_back(mCurrentNode);
+                mCurrentNode = mCurrentNode->left;
+            } else {
+                mCurrentNode = mStack.back();
+                mStack.pop_back();
+                val = mCurrentNode->val;
+                mCurrentNode = mCurrentNode->right;
+                break;
+            }
+        }
+        return val;
+    }
+private:
+    vector<TreeNode*> mStack;
+    TreeNode* mCurrentNode;
 };
+
 
 template<typename T>
 void printVector(const vector<T>& list)

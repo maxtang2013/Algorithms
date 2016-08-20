@@ -20,7 +20,30 @@ struct Comparator {
 
 class Solution {
 public:
+    int nthUglyNumber(int n) {
+        int primes[] = {2, 3, 5};
+        int k = sizeof (primes) / sizeof(int);
+        vector<int> ugly(n, 1);
+        vector<int> index(k, 0);
 
+        for (int i = 1; i < n; ++i)
+        {
+            int m = INT_MAX;
+            for (int j = 0; j < k; ++j)
+            {
+                int next = primes[j] * ugly[index[j]];
+                if (next == ugly[i-1])
+                {
+                    ++index[j];
+                    next = primes[j] * ugly[index[j]];
+                }
+                
+                m = min(m, next);
+            }
+            ugly[i] = m;
+        }
+        return ugly[n-1];
+    }
 };
 
 template<typename T>

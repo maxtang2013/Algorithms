@@ -5,22 +5,35 @@
 
 using namespace std;
 
-struct Entry {
-    int x, y;
-    int val;
+struct TreeLinkNode {
+    TreeLinkNode *left;
+    TreeLinkNode *right;
+    TreeLinkNode *next;
 };
-
-struct Comparator {
-    bool operator()(const Entry& e1, const Entry& e2)
-    {
-        return e1.val > e2.val;
-    }
-};
-// priority_queue<Entry, vector<Entry>, Comparator> Q;
 
 class Solution {
 public:
-
+    void connect(TreeLinkNode *root) {
+        
+        while (root != NULL)
+        {
+            TreeLinkNode* parent = root, *nextParent = root->next;
+            
+            while (parent != NULL)
+            {
+                nextParent = parent->next;
+                
+                if (parent->left != NULL)
+                    parent->left->next = parent->right;
+                
+                if (parent->right != NULL && nextParent != NULL)
+                    parent->right->next = nextParent->left;
+                
+                parent = parent->next;
+            }
+            root = root->left;
+        }
+    }
 };
 
 template<typename T>
