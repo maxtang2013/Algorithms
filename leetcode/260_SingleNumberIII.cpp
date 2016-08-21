@@ -44,6 +44,7 @@ public:
         return ans;
     }
     
+    
     vector<int> singleNumber2(vector<int>& nums)
     {
         // Pass 1 :
