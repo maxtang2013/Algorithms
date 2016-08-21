@@ -18,6 +18,7 @@ struct Comparator {
 };
 // priority_queue<Entry, vector<Entry>, Comparator> Q;
 
+// DP
 class Solution {
 public:
     int maxCoins(vector<int>& nums) {
