@@ -56,6 +56,11 @@ public:
     }
     
 private:
+    // Considering split the two arrays in the following way:
+    // a[0], a[1], ..., a[i-1], | a[i], ...
+    // b[0], b[1], ..., b[j-1], | b[j], ...
+    // where i + j = k.
+    // If a[i-1] <= b[j] || b[j-1] <= a[i], then max(a[i-1], b[j-1]) is the answer.
     int findKthSmallest(vector<int> &a, vector<int> &b, int k) {
         if (a.size() > b.size()) return findKthSmallest(b, a, k);
         if (a.empty()) return b[k];
@@ -149,6 +154,11 @@ private:
         }
     }
     
+    // Split the two arrays into four parts, (a[lowa], a[mid]), (a[mid+1], a[higha]),
+    // and (b[lowb], b[midb]), (b[midb+1], b[highb])
+    //  then compare the middle two elements and we
+    // will find that we can discard one of these four parts in any case.
+    //
     // k is 0-based for this method.
     // Assuming both array 'a' and 'b' are sorted ascendingly.
     int findKthSmallest1(vector<int>& a, vector<int>& b, int k) {
