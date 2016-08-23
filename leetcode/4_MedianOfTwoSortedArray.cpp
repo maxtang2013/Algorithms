@@ -19,6 +19,7 @@ public:
             return (m1 + (double)m2) / 2.0;
         }
     }
+
     
     // k is 1-based here.
     int findKthLargest(vector<int>& a, vector<int>& b, int k) {
@@ -27,9 +28,70 @@ public:
     }
     
 private:
+    
+    // if (a[i] >= b[j-1] && a[i] <= b[j] and (i+1) + (j) == k + 1
+    // j = k-j-1;
+    int findKthSmallest(vector<int> &a, vector<int> &b, int k) {
+        if (a.size() > b.size()) return findKthSmallest1(b, a, k);
+        if (a.empty()) return b[k];
+        
+        int low = 0, high = (int)a.size() - 1;
+        while (low < high) {
+            int mid = (low + high) / 2;
+            int j = k - mid;
+            
+            if ( j < 0 ) {
+                high = mid; continue;
+            }
+            
+            if (j == b.size())
+            {
+                if (a[mid] >= b[b.size()-1])
+                    return a[mid];
+                low = mid + 1;
+            }
+            
+            if ( j > b.size() ) {
+                low = mid + 1; continue;
+            }
+            
+            if (b[j] >= a[mid] && (j == 0 || b[j-1] <= a[mid])) {
+                // (a[0], a[1], ...,   a[i])
+                // (b[0], ..., b[j-1])
+                // A total of (i+1 + j) = k+1 elements, we are sure a[mid] is the kth one.
+                return a[mid];
+            } else if (b[j] < a[mid]) {
+                // (a[0], a[1], ...  a[i])
+                // (b[0], ..., b[j])  a total of (i+1 + j+1) = k + 2 elements
+                // More then k.
+                // Move to left side.
+                high = mid;
+            } else { // j > 0 && b[j-1] > a[mid]
+                // (a[0], ..., a[i])
+                // (b[0],      ..., (b[j-1], ... )
+                // we are sure a[i] is on the left side of the kth element, move right
+                low = mid + 1;
+            }
+        }
+        
+        int j = k - low;
+        
+        if (j >= b.size()) {
+            return a[low] > b[b.size()-1] ? a[low] : b[b.size()-1];
+        }
+        
+        if (b[j] >= a[low] && (j == 0 || b[j-1] <= a[low]))
+            return a[low];
+        else if (b[j] < a[low]) {
+            return b[j];
+        } else {
+            return b[j-1];
+        }
+    }
+    
     // k is 0-based for this method.
     // Assuming both array 'a' and 'b' are sorted ascendingly.
-    int findKthSmallest(vector<int>& a, vector<int>& b, int k) {
+    int findKthSmallest1(vector<int>& a, vector<int>& b, int k) {
         int lowa = 0, higha = (int)a.size() - 1, lowb = 0, highb = (int)b.size() - 1;
         if (a.empty()) return b[k];
         if (b.empty()) return a[k];
@@ -111,7 +173,7 @@ void Test0()
     vector<int> a = {1, 3, 4};
     vector<int> b = {2, 4, 6, 7};
     
-    printf("%f\n", sln.findMedianSortedArrays(a, b));
+    printf("Expected:4.00000, returned:%f\n", sln.findMedianSortedArrays(a, b));
 }
 
 void Test1()
@@ -121,7 +183,7 @@ void Test1()
     vector<int> a = {2};
     vector<int> b = {};
     
-    printf("%f\n", sln.findMedianSortedArrays(a, b));
+    printf("Expected:2.00000, %f\n", sln.findMedianSortedArrays(a, b));
 }
 
 void Test2()
@@ -131,7 +193,7 @@ void Test2()
     vector<int> a = {3, 3, 3, 3};
     vector<int> b = {3, 3, 3, 3};
     
-    printf("%f\n", sln.findMedianSortedArrays(a, b));
+    printf("Expected:3.00000, %f\n", sln.findMedianSortedArrays(a, b));
 }
 
 void Test3()
@@ -141,7 +203,7 @@ void Test3()
     vector<int> a = {3};
     vector<int> b = {3};
     
-    printf("%f\n", sln.findMedianSortedArrays(a, b));
+    printf("Expected:3.00000, %f\n", sln.findMedianSortedArrays(a, b));
 }
 
 void Test4()
@@ -153,8 +215,8 @@ void Test4()
     
     int x = sln.findKthLargest(a, b, 1);
     
-    printf("%f\n", sln.findMedianSortedArrays(a, b));
-    printf("%f\n", sln.findMedianSortedArrays(b, a));
+    printf("Expected:1.00000, %f\n", sln.findMedianSortedArrays(a, b));
+    printf("Expected:1.00000, %f\n", sln.findMedianSortedArrays(b, a));
 }
 
 void Test5()
@@ -162,7 +224,31 @@ void Test5()
     vector<int> a = {1,3};
     vector<int> b = {2};
     Solution sln;
-    printf("%f\n", sln.findMedianSortedArrays(a, b));
+    printf("Expected:2.00000, %f\n", sln.findMedianSortedArrays(a, b));
+}
+
+void Test6()
+{
+    vector<int> a = {1,2};
+    vector<int> b = {3,4};
+    Solution sln;
+    printf("Expected:2.50000,%f\n", sln.findMedianSortedArrays(a, b));
+}
+void Test7()
+{
+    vector<int> a = {2};
+    vector<int> b = {1};
+    Solution sln;
+    printf("Expected:1.50000, %f\n", sln.findMedianSortedArrays(a, b));
+
+}
+void Test8()
+{
+    vector<int> a = {3,4};
+    vector<int> b = {1,2};
+    Solution sln;
+    printf("Expected:2.50000, %f\n", sln.findMedianSortedArrays(a, b));
+    
 }
 
 int main()
@@ -173,5 +259,8 @@ int main()
     Test3();
     Test4();
     Test5();
+    Test6();
+    Test7();
+    Test8();
     return 0;
 }
