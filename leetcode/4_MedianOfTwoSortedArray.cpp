@@ -7,6 +7,32 @@ using namespace std;
 
 class Solution {
 public:
+    
+    double findMedianSortedArrays1(vector<int>& A, vector<int>& B) {
+        int m = (int)A.size(), n = (int)B.size();
+        if (m > n) return findMedianSortedArrays1(B, A);
+        int minidx = 0, maxidx = m, i=0, j=0, num1 = 0, mid = (m + n + 1) >> 1,num2;
+        while (minidx <= maxidx)
+        {
+            i = (minidx + maxidx) >> 1;
+            j = mid - i;
+            if (i<m && j>0 && B[j-1] > A[i]) minidx = i + 1;
+            else if (i>0 && j<n && B[j] < A[i-1]) maxidx = i - 1;
+            else
+            {
+                if (i == 0) num1 = B[j-1];
+                else if (j == 0) num1 = A[i - 1];
+                else num1 = max(A[i-1],B[j-1]);
+                break;
+            }
+        }
+        if (((m + n) & 1)) return num1;
+        if (i == m) num2 = B[j];
+        else if (j == n) num2 = A[i];
+        else num2 = min(A[i],B[j]);
+        return (num1 + num2) / 2.;
+    }
+    
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         int k = (int)(nums1.size() + nums2.size());
         
@@ -15,7 +41,7 @@ public:
         } else {
             int m1 = findKthSmallest(nums1, nums2, k/2-1);
             int m2 = (double)findKthSmallest(nums1, nums2, k/2);
-            // printf("m1=%d, m2=%d\n", m1, m2);
+            printf("m1=%d, m2=%d\n", m1, m2);
             return (m1 + (double)m2) / 2.0;
         }
     }
@@ -29,66 +55,41 @@ public:
     
 private:
     
-    // if (a[i] >= b[j-1] && a[i] <= b[j] and (i+1) + (j) == k + 1
-    // j = k-j-1;
+    // i+j = k+1
+    //
+    //
     int findKthSmallest(vector<int> &a, vector<int> &b, int k) {
-        if (a.size() > b.size()) return findKthSmallest1(b, a, k);
+        if (a.size() > b.size()) return findKthSmallest(b, a, k);
         if (a.empty()) return b[k];
         
-        int low = 0, high = (int)a.size() - 1;
-        while (low < high) {
-            int mid = (low + high) / 2;
-            int j = k - mid;
+        int low = 0, high = (int)a.size();
+        int size_a = (int)a.size();
+        int size_b = (int)b.size();
+        
+        while (low <= high) {
+            int i = (low + high) / 2;
+            int j = k + 1 - i;
             
-            if ( j < 0 ) {
-                high = mid; continue;
+            if (j < 0 || (j >= 0 && j < size_b && i > 0 && b[j] < a[i-1])) {
+                high = i;
+                continue;
             }
             
-            if (j == b.size())
-            {
-                if (a[mid] >= b[b.size()-1])
-                    return a[mid];
-                low = mid + 1;
+            if (j > size_b || (i < size_a && b[j-1] > a[i])) {
+                low = i + 1;
+                continue;
             }
             
-            if ( j > b.size() ) {
-                low = mid + 1; continue;
-            }
-            
-            if (b[j] >= a[mid] && (j == 0 || b[j-1] <= a[mid])) {
-                // (a[0], a[1], ...,   a[i])
-                // (b[0], ..., b[j-1])
-                // A total of (i+1 + j) = k+1 elements, we are sure a[mid] is the kth one.
-                return a[mid];
-            } else if (b[j] < a[mid]) {
-                // (a[0], a[1], ...  a[i])
-                // (b[0], ..., b[j])  a total of (i+1 + j+1) = k + 2 elements
-                // More then k.
-                // Move to left side.
-                high = mid;
-            } else { // j > 0 && b[j-1] > a[mid]
-                // (a[0], ..., a[i])
-                // (b[0],      ..., (b[j-1], ... )
-                // we are sure a[i] is on the left side of the kth element, move right
-                low = mid + 1;
-            }
+            int ans = 0;
+            if (i == 0) ans = b[j-1];
+            else if (j == 0) ans = a[i-1];
+            else ans = max(a[i-1], b[j-1]);
+            return ans;
         }
         
-        int j = k - low;
-        
-        if (j >= b.size()) {
-            return a[low] > b[b.size()-1] ? a[low] : b[b.size()-1];
-        }
-        
-        if (b[j] >= a[low] && (j == 0 || b[j-1] <= a[low]))
-            return a[low];
-        else if (b[j] < a[low]) {
-            return b[j];
-        } else {
-            return b[j-1];
-        }
+        // Make the compiler happy.
+        return INT_MIN;
     }
-    
     // k is 0-based for this method.
     // Assuming both array 'a' and 'b' are sorted ascendingly.
     int findKthSmallest1(vector<int>& a, vector<int>& b, int k) {
@@ -253,9 +254,9 @@ void Test8()
 
 int main()
 {
-    Test0();
-    Test1();
-    Test2();
+//    Test0();
+//    Test1();
+//    Test2();
     Test3();
     Test4();
     Test5();
