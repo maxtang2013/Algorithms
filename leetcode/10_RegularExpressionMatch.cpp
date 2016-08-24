@@ -48,21 +48,14 @@ public:
             
             if (i < n - 1 && p[i+1] == '*') {
                 for (int j = 0; j <= m; ++j) {
-                    int k = j - 1;
                     
                     matches[i+2][j] = matches[i][j];
                     
-                    while (k >= 0 && !matches[i+2][j]) {
-                        if (p[i] != '.' && p[i] != s[k])
-                            break;
-                        if( matches[i][k] ) {
-                            matches[i+2][j] = true;
-                            break;
-                        }
-                        --k;
+                    if (j > 0 && (p[i] == '.' || p[i] == s[j-1]) && matches[i+2][j-1]) {
+                        matches[i+2][j] = true;
                     }
                 }
-            }  else {
+            } else {
                 for (int j = 0; j < m; ++j) {
                     if (p[i] == '.' || p[i] == s[j]) {
                         matches[i+1][j+1] = matches[i][j];
