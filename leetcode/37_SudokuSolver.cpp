@@ -68,7 +68,7 @@ private:
                 }
             }
         }
-         
+    
     }
     
     void moveToNextPosition(int &i, int&j) {
