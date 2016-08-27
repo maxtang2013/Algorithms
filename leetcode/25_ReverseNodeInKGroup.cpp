@@ -14,6 +14,40 @@ struct ListNode {
 class Solution {
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
+        
+        if (head == NULL || k < 2) return head;
+        
+        // 1. using of the dummy node, makes the first group the same to other groups.
+        ListNode dummy(0);
+        dummy.next = head;
+        
+        ListNode* prev = &dummy;
+        
+        while (prev != NULL) {
+            ListNode* groupHead = prev->next;
+            ListNode* tail = groupHead;
+            for (int i = 1; tail != NULL && i < k; ++i) {
+                tail = tail->next;
+            }
+            if (tail == NULL) break;
+            
+            // prev->tmp->...->tail->nextGroupHead
+            // prev->...->tail->tmp->nextGroupHead
+            // Just delete prev->next and insert it after 'tail', util tail become prev->next.
+            while (prev->next != tail) {
+                ListNode* tmp = prev->next;
+                prev->next = tmp->next;
+                
+                tmp->next = tail->next;
+                tail->next = tmp;
+            }
+            
+            prev = groupHead;
+        }
+        return dummy.next;
+    }
+    
+    ListNode* reverseKGroup1(ListNode* head, int k) {
         ListNode* node = head;
         ListNode* prevTail = NULL;
         ListNode* newHead = NULL;
