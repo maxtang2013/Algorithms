@@ -9,6 +9,40 @@ using namespace std;
 class Solution {
 public:
     int longestValidParentheses(string s) {
+        int n = s.length();
+        int cnt = 0;
+        int len = 0;
+        int maxLen = 0;
+        for (int i = 0; i < n; ++i) {
+            if (s[i] == '(') ++cnt;
+            else --cnt;
+            
+            ++len;
+            
+            if (cnt < 0) {
+                cnt = 0;
+                len = 0;
+            } else if (cnt == 0) {
+                maxLen = max(maxLen, len);
+            }
+        }
+        cnt = 0;
+        len = 0;
+        
+        for (int i = n-1; i >= 0; --i) {
+            if (s[i] == ')') ++cnt;
+            else --cnt;
+            ++len;
+            if (cnt < 0) {
+                cnt = 0;
+                len = 0;
+            } else if (cnt == 0) {
+                maxLen = max(maxLen, len);
+            }
+        }
+        return maxLen;
+    }
+    int longestValidParentheses_DP_O_N_2(string s) {
         int n = (int)s.length();
         int longest = 0;
         // int** cnt = new int*[n];
@@ -103,9 +137,11 @@ void printVector(const vector<T>& list)
 void Test0()
 {
     Solution sln;
+    printf("%d\n", sln.longestValidParentheses(")()("));
     printf("%d\n", sln.longestValidParentheses(")()())"));
     printf("%d\n", sln.longestValidParentheses(")(()())"));
     printf("%d\n", sln.longestValidParentheses(")()(()))"));
+    printf("%d\n", sln.longestValidParentheses("()(()()"));
     
     printf("%d\n", sln.longestValidParentheses(")()(()()))()))()))()())()(()((()(()())))()(((())))))((()(()(()(())())(())()()()((((()(()()(((((()()(()(())((())(()())(())()(()(())((((()(((())()((()))(())((("));
     
