@@ -40,6 +40,20 @@ void printVector(const vector<T>& list)
         if (i < len - 1) std::cout << " ";
         else std::cout << "\n";
     }
+    cout << endl;
+}
+template <typename T>
+void printBoard(const vector<vector<T>>& board) {
+    int n = (int)board.size();
+    for (int i = 0; i < n; ++i) {
+        int m = (int)board[i].size();
+        for (int j = 0; j < m; ++j) {
+            cout << board[i][j];
+            if (j < m - 1) cout << " ";
+            else cout << endl;
+        }
+    }
+    cout << endl;
 }
 
 int getLastBit(int n)
