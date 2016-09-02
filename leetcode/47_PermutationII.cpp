@@ -15,6 +15,7 @@ public:
         mAns.clear();
         perm.resize(nums.size());
         
+        sort (nums.begin(), nums.end());
         generatePerm(nums, 0, perm);
         
         return mAns;
@@ -26,15 +27,15 @@ private:
             mAns.push_back(perm);
             return;
         }
-        unordered_map<int, bool> visitedHere;
         
         for (int i = 0; i < n; ++i) {
-            if (!mVisited[i] && !visitedHere.count(nums[i])) {
-                visitedHere[nums[i]] = 1;
+            if (!mVisited[i]) {
                 mVisited[i] = 1;
                 perm[k] = nums[i];
                 generatePerm(nums, k+1, perm);
                 mVisited[i] = 0;
+                
+                while (i < n && nums[i+1] == nums[i]) ++i;
             }
         }
     }
