@@ -6,10 +6,51 @@
 using namespace std;
 
 
-// The key to solve this problem is that we can record the k-th occurrence of each character in string s.
+
 class Solution {
 public:
-    string minWindow(string s, string t) {
+    
+    // Two pointers solution.
+    string minWindow(string s, string t)
+    {
+        if (t == "") return "";
+        vector<int> targetCnt(256);
+        vector<int> cnt(256);
+        int n = (int) s.length();
+        int m = (int) t.length();
+        
+        for (char c:t) targetCnt[c]++;
+        
+        int ansStart = 0, ansLen = n+1;
+        int i = 0, j = 0;
+        int counter = 0;
+        while ( i < n || counter == m ) {
+            if (counter < m) {
+                char c = s[i];
+                ++cnt[c];
+                
+                if (targetCnt[c] >= cnt[c]) ++counter;
+                ++i;
+            } else {
+                
+                if (ansLen > i - j) {
+                    ansLen = i - j;
+                    ansStart = j;
+                }
+                
+                char c = s[j];
+                --cnt[c];
+                
+                if (targetCnt[c] > cnt[c]) --counter;
+                ++j;
+            }
+        }
+        if (ansLen > n) return "";
+        return s.substr(ansStart, ansLen);
+    }
+    
+    // The key to solve this problem is that we can record the k-th occurrence of each character in string s.
+    string minWindow1(string s, string t) {
         int n = (int)s.length();
         
         // index[baseIndex[cha] + k - 1] is the index of the k-th occurence of character 'cha' in string s.
