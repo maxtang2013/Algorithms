@@ -25,16 +25,37 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-
-
 class Solution {
 public:
-
+    bool isValidSudoku(vector<vector<char>>& board) {
+        for (int i = 0; i < 9; ++i) {
+            mRowMask[i] = mColMask[i] = mBlockMask[i] = 0;
+        }
+        
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                int block = i/3 * 3 + j/3;
+                
+                if (board[i][j] != '.') {
+                    
+                    int m = 1 << (board[i][j] - '0');
+                    
+                    if ((mRowMask[i] & m) != 0 || (mColMask[j] & m) != 0 || (mBlockMask[block] & m) != 0)
+                        return false;
+                    
+                    mRowMask[i] |= m;
+                    mColMask[j] |= m;
+                    mBlockMask[block] |= m;
+                }
+            }
+        }
+        return true;
+    }
+    
+private:
+    int mRowMask[9];
+    int mColMask[9];
+    int mBlockMask[9];
 };
 
 template<typename T>
@@ -47,30 +68,7 @@ void printVector(const vector<T>& list)
         if (i < len - 1) std::cout << " ";
         else std::cout << "\n";
     }
-    cout << endl;
 }
-template <typename T>
-void printBoard(const vector<vector<T>>& board) {
-    int n = (int)board.size();
-    for (int i = 0; i < n; ++i) {
-        int m = (int)board[i].size();
-        for (int j = 0; j < m; ++j) {
-            cout << board[i][j];
-            if (j < m - 1) cout << " ";
-            else cout << endl;
-        }
-    }
-    cout << endl;
-}
-
-void printfLinkedList(ListNode* head) {
-    while (head != NULL) {
-        cout << head->val << " ";
-        head = head->next;
-    }
-    cout << endl;
-}
-
 
 int getLastBit(int n)
 {

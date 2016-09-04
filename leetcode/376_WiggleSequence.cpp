@@ -2,6 +2,7 @@
 #include <vector>
 #include <bitset>
 #include <queue>
+#include <cmath>
 
 using namespace std;
 
@@ -17,24 +18,31 @@ struct Comparator {
     }
 };
 // priority_queue<Entry, vector<Entry>, Comparator> Q;
-
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
 
 class Solution {
 public:
-
+    int wiggleMaxLength(vector<int>& nums) {
+        int diff = 0, prev = 0, ans = 0;
+        int n = (int) nums.size(), i;
+        
+        if (n < 2) return n;
+        
+        ans = 1;
+        
+        for (i = 1; i < n; ++i)
+        {
+            diff = nums[i] - nums[i - 1];
+            if (diff != 0 && ans < 2) ans = 2;
+            if (sgn(prev) * sgn(diff) < 0) ++ans;
+            
+            if (diff != 0) prev = diff;
+        }
+        
+        return ans;
+    }
 };
 
 template<typename T>
@@ -47,30 +55,7 @@ void printVector(const vector<T>& list)
         if (i < len - 1) std::cout << " ";
         else std::cout << "\n";
     }
-    cout << endl;
 }
-template <typename T>
-void printBoard(const vector<vector<T>>& board) {
-    int n = (int)board.size();
-    for (int i = 0; i < n; ++i) {
-        int m = (int)board[i].size();
-        for (int j = 0; j < m; ++j) {
-            cout << board[i][j];
-            if (j < m - 1) cout << " ";
-            else cout << endl;
-        }
-    }
-    cout << endl;
-}
-
-void printfLinkedList(ListNode* head) {
-    while (head != NULL) {
-        cout << head->val << " ";
-        head = head->next;
-    }
-    cout << endl;
-}
-
 
 int getLastBit(int n)
 {
@@ -115,12 +100,38 @@ int countBits(int n)
 
 void Test0()
 {
+    vector<int> nums = {1,17,5,10,13,15,10,5,16,8};
     Solution sln;
+    printf("%d\n", sln.wiggleMaxLength(nums));
+}
+
+void Test1()
+{
+    vector<int> nums = {1};
+    Solution sln;
+    printf("%d\n", sln.wiggleMaxLength(nums));
+}
+
+void Test2()
+{
+    vector<int> nums = {1, 1};
+    Solution sln;
+    printf("%d\n", sln.wiggleMaxLength(nums));
+}
+
+void Test3()
+{
+    vector<int> nums = {1,7,4,9,2,5};
+    Solution sln;
+    printf("%d\n", sln.wiggleMaxLength(nums));
 }
 
 int main()
 {
     Test0();
+    Test1();
+    Test2();
+    Test3();
     
     return 0;
 }

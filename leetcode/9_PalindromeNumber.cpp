@@ -25,16 +25,43 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-
-
 class Solution {
 public:
-
+    bool isPalindrome(int x) {
+        
+        while (x >= 0) {
+            if (x >= 0 && x < 10) return true;
+            
+            long long p = 10;
+            int prevp = 1;
+            long long lastDigit = x % 10;
+            if (lastDigit == 0) return false;
+            
+            x -= lastDigit;
+            while (p <= x) {
+                lastDigit *= 10;
+                prevp = (int)p;
+                p *= 10;
+            }
+            
+            // The variable 'lastDigit' can be greater then INT_MAX here.
+            if (lastDigit > x) return false;
+            
+            if (x - lastDigit >= prevp) return false;
+            
+            x -= lastDigit;
+            
+            // Dealing with leading zeros.
+            while (x % 10 == 0 && prevp >= 100 && x < prevp) {
+                prevp /= 100;
+                x /= 10;
+            }
+            
+            if (x > 0 && prevp > x) return false;
+        }
+        
+        return false;
+    }
 };
 
 template<typename T>
@@ -47,30 +74,7 @@ void printVector(const vector<T>& list)
         if (i < len - 1) std::cout << " ";
         else std::cout << "\n";
     }
-    cout << endl;
 }
-template <typename T>
-void printBoard(const vector<vector<T>>& board) {
-    int n = (int)board.size();
-    for (int i = 0; i < n; ++i) {
-        int m = (int)board[i].size();
-        for (int j = 0; j < m; ++j) {
-            cout << board[i][j];
-            if (j < m - 1) cout << " ";
-            else cout << endl;
-        }
-    }
-    cout << endl;
-}
-
-void printfLinkedList(ListNode* head) {
-    while (head != NULL) {
-        cout << head->val << " ";
-        head = head->next;
-    }
-    cout << endl;
-}
-
 
 int getLastBit(int n)
 {
@@ -116,6 +120,11 @@ int countBits(int n)
 void Test0()
 {
     Solution sln;
+//    printf("%d\n", sln.isPalindrome(1100011));
+//    printf("%d\n", sln.isPalindrome(11030011));
+//    printf("%d\n", sln.isPalindrome(110303011));
+//    printf("%d\n", sln.isPalindrome(INT_MAX));
+    printf("%d\n", sln.isPalindrome(1410110141));
 }
 
 int main()

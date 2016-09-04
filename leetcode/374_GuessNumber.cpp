@@ -18,23 +18,34 @@ struct Comparator {
 };
 // priority_queue<Entry, vector<Entry>, Comparator> Q;
 
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
+int sTarget = 0;
 
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
+int guess(int num) {
+    if (sTarget < num) return -1;
+    if (sTarget == num) return 0;
+    return 1;
 };
-
 
 class Solution {
 public:
-
+    int guessNumber(int n) {
+        int low = 1, high = n;
+        
+        while (low < high) {
+            int mid = (low + (long long)high) / 2;
+            int res = guess(mid);
+            
+            if (res == 0) return mid;
+            
+            if (res < 0) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        
+        return guess(low) == 0 ? low : low - 1;
+    }
 };
 
 template<typename T>
@@ -47,30 +58,7 @@ void printVector(const vector<T>& list)
         if (i < len - 1) std::cout << " ";
         else std::cout << "\n";
     }
-    cout << endl;
 }
-template <typename T>
-void printBoard(const vector<vector<T>>& board) {
-    int n = (int)board.size();
-    for (int i = 0; i < n; ++i) {
-        int m = (int)board[i].size();
-        for (int j = 0; j < m; ++j) {
-            cout << board[i][j];
-            if (j < m - 1) cout << " ";
-            else cout << endl;
-        }
-    }
-    cout << endl;
-}
-
-void printfLinkedList(ListNode* head) {
-    while (head != NULL) {
-        cout << head->val << " ";
-        head = head->next;
-    }
-    cout << endl;
-}
-
 
 int getLastBit(int n)
 {
@@ -116,11 +104,24 @@ int countBits(int n)
 void Test0()
 {
     Solution sln;
+    
+    sTarget = 8;
+    printf("%d\n", sln.guessNumber(20));
+}
+
+void Test1()
+{
+    
+    Solution sln;
+    
+    sTarget = 1702766719;
+    printf("%d\n", sln.guessNumber(2126753390));
 }
 
 int main()
 {
-    Test0();
+    // Test0();
+    Test1();
     
     return 0;
 }

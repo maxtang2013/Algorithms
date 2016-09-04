@@ -27,7 +27,63 @@ struct TreeNode {
 
 class Solution {
 public:
-
+    int superPow(int a, vector<int>& b) {
+        const int mod = 1337;
+        int r[mod] = {0};
+        bool vst[mod] = {0};
+        int loopLen = 0;
+        a = a % mod;
+        int p = a;
+        
+        if (a == 0) return 0;
+        
+        for (int i = 0; i < mod; ++i)
+        {
+            if (vst[p]) {
+                for (int j = i - 1; j >= 0; --j)
+                {
+                    if (r[j] == p)
+                    {
+                        loopLen = i - j;
+                        break;
+                    }
+                }
+                
+                break;
+            }
+            vst[p] = 1;
+            r[i] = p;
+            p = p * a % mod;
+        }
+        
+        int t = 0;
+        for (int i = 0; i < b.size(); ++i) {
+            t = (t * 10 + b[i]) % loopLen;
+        }
+        
+        if (t == 0) t = loopLen;
+        
+        
+        
+        return r[t-1];
+    }
+    
+    int getSum(int a, int b) {
+        int mask = 1;
+        int carry = 0;
+        int ans = 0;
+        for (int i = 0; i < 32; ++i)
+        {
+            int a1 = a&mask, b1 = b&mask;
+            
+            ans |= a1 ^ b1 ^ carry;
+            
+            carry = ((a1 & b1) || (a1 & carry) || (b1 & carry)) ? mask << 1 : 0;
+            
+            mask = mask << 1;
+        }
+        return ans;
+    }
 };
 
 template<typename T>
@@ -86,11 +142,64 @@ int countBits(int n)
 void Test0()
 {
     Solution sln;
+    vector<int> b = {1,0};
+    for (int  k = 2; k < 1337; ++k)
+    printf("%d\n", sln.superPow(k, b));
+}
+
+int pow(int a, int b, int mod)
+{
+    int mask = 1;
+    int p = a;
+    int ans = 1;
+    
+    for (int i = 0; i < 11; ++i)
+    {
+        if (b & mask) ans = (ans * p) % mod;
+        p = p*p % mod;
+        mask = mask << 1;
+    }
+    return ans;
+}
+
+void Check()
+{
+    int cnt = 0;
+    
+    for (int i = 2; i < 1337; ++i)
+    {
+        bool visited[1337] = {0};
+        int r = i;
+        for (int j = 0; j < 1337; ++j)
+        {
+            r = r * i % 1337;
+        }
+    }
+    
+    
+    for (int i = 2; i < 191; ++i)
+    {
+        int ans = pow(i, 190, 191);
+        printf("%d ", ans);
+    }
+
+}
+
+void Test2() {
+    Solution sln;
+    printf("%d\n", sln.getSum(3, -2));
+    printf("%d\n", sln.getSum(3, -2));
+    printf("%d\n", sln.getSum(-147, 1));
 }
 
 int main()
 {
-    Test0();
+    //Check();
+    
+    Test2();
+    
+    
+    //printf("%d\n", cnt);
     
     return 0;
 }
