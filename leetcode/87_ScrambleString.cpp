@@ -8,7 +8,50 @@ using namespace std;
 
 class Solution {
 public:
+    
     bool isScramble(string s1, string s2) {
+        int n = (int) s1.size();
+        bool*** match = new bool**[n+1];
+        for (int i = 0; i <= n; ++i) {
+            match[i] = new bool*[n];
+            for (int j = 0; j < n; ++j) {
+                match[i][j] = new bool[n];
+                memset(match[i][j], 0, sizeof(bool)*n);
+            }
+        }
+        
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                match[1][i][j] = s1[i] == s2[j];
+            }
+        }
+        
+        for (int len = 2; len <= n; ++len) {
+            for (int i = 0; i + len <= n; ++i) {
+                for (int j = 0; j + len <= n; ++j) {
+                    for (int k = 1; k < len; ++k) {
+                        match[len][i][j] = match[len][i][j]
+                            || (match[k][i][j] && match[len-k][i+k][j+k])
+                            || (match[len-k][i][j+k] && match[k][i+len-k][j]);
+                    }
+                }
+            }
+        }
+        
+        bool ans = match[n][0][0];
+        
+        for (int i = 0; i <= n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                delete[] match[i][j];
+            }
+            delete[] match[i];
+        }
+        delete[] match;
+        
+        return ans;
+    }
+    
+    bool isScramble1(string s1, string s2) {
         int m = (int) s1.length();
         
         if (m == 1) return s1 == s2;
