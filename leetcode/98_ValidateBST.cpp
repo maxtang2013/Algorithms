@@ -28,12 +28,15 @@ public:
                 n = S.back();
                 S.pop_back();
                 
-                TreeNode* p = n;
+                // Visit the node here.
                 
                 if (prev != NULL && prev->val >= n->val) {
                     return false;
                 }
-                prev = p;
+                
+                // Previous node is the node we've just visited.
+                prev = n;
+                
                 n = n->right;
             }
         }
