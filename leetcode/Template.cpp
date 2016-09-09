@@ -25,6 +25,11 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
+struct TreeNodeItem {
+    TreeNode* node;
+    int level;
+};
+
 struct ListNode {
     int val;
     ListNode *next;
@@ -34,7 +39,6 @@ struct ListNode {
 
 class Solution {
 public:
-
 };
 
 template<typename T>
@@ -158,11 +162,12 @@ void TreeNodeTest()
         if (i*2+2<len)
             nodes[i].right = nodes + (i*2+2);
     }
-
+}
 
 void Test0()
 {
     Solution sln;
+    
 }
 
 int main()
