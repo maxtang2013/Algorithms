@@ -8,6 +8,19 @@ using namespace std;
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
+        int n = (int) prices.size();
+        if (n < 2) return 0;
+        int bought = -prices[0];
+        int sold = INT_MIN;
+        
+        for (int i = 1; i < n; ++i) {
+            sold = max(sold, bought + prices[i]);
+            bought = max(bought, -prices[i]);
+        }
+        return max(0, sold);
+    }
+    
+    int maxProfit_Stack(vector<int>& prices) {
         int n = (int)prices.size();
         vector<int> S;
         S.reserve(n);
