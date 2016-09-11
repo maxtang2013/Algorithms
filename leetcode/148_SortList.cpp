@@ -11,9 +11,99 @@ struct ListNode {
     ListNode(int x) : val(x), next(NULL) {}
 };
 
+void printfLinkedList(ListNode* head);
 
 class Solution {
 public:
+    
+    ListNode* merge(ListNode* slow, ListNode* fast) {
+        ListNode dummy(0);
+        ListNode* curr = &dummy;
+        
+        while (slow != NULL && fast != NULL) {
+            if (slow->val <= fast->val) {
+                curr->next = slow;
+                curr = slow;
+                slow = slow->next;
+            } else {
+                curr->next = fast;
+                curr = fast;
+                fast = fast->next;
+            }
+        }
+        if (slow != NULL) {
+            curr->next = slow;
+        }
+        if (fast != NULL) {
+            curr->next = fast;
+        }
+        return dummy.next;
+    }
+    
+    ListNode* getListTail(ListNode* node, int k) {
+        for (int i = 0; node->next != NULL && i < k; ++i) {
+            node = node->next;
+        }
+        return node;
+    }
+    
+    ListNode* bottomUpMergeSort(ListNode* head) {
+        int len = 1;
+        bool merged = true;
+        while (merged) {
+            ListNode* nextPair = head;
+            ListNode* mergedList = NULL;
+            ListNode* prevTail = NULL;
+            ListNode* newHead = NULL;
+            
+            merged = false;
+            
+            while (nextPair != NULL) {
+                ListNode* secondList = nextPair, *firstList = nextPair;
+                ListNode* tail;
+                
+                // find the tail of the first list to merge.
+                tail = getListTail(firstList, len - 1);
+                if (tail->next != NULL) {
+                    secondList = tail->next;
+                    tail->next = NULL;
+                    
+                    // find the tail of the second list
+                    tail = getListTail(secondList, len - 1);
+                    
+                    nextPair = tail->next;
+                    tail->next = NULL;
+                    
+                    merged = true;
+                    
+                    mergedList = merge(firstList, secondList);
+                } else {
+                    mergedList = firstList;
+                    nextPair = NULL;
+                }
+                
+                if (newHead == NULL) newHead = mergedList;
+                
+                if (prevTail != NULL) {
+                    prevTail->next = mergedList;
+                } else {
+                    prevTail = mergedList;
+                }
+                
+                while (prevTail->next != NULL) {
+                    prevTail = prevTail->next;
+                }
+            }
+            
+            if (newHead != NULL) head = newHead;
+            // cout << "Round: "<< len <<  endl;
+            printfLinkedList(head);
+            len = len << 1;
+        }
+        
+        return head;
+    }
+    
     // Merge sort
     ListNode* sortList(ListNode* head) {
         if (head == NULL || head->next == NULL)
@@ -71,7 +161,9 @@ void Test0()
     for (int i = 0; i < len-1; ++i) {
         nodes[i].next = nodes + i + 1;
     }
-    printfLinkedList(sln.sortList(nodes));
+    
+    // printfLinkedList(sln.bottomUpMergeSort(nodes));
+    //printfLinkedList(sln.sortList(nodes));
 }
 
 void Test1()
@@ -83,7 +175,10 @@ void Test1()
     for (int i = 0; i < len-1; ++i) {
         nodes[i].next = nodes + i + 1;
     }
-    printfLinkedList(sln.sortList(nodes));
+    
+    // printfLinkedList(sln.sortList(nodes));
+    
+    printfLinkedList(sln.bottomUpMergeSort(nodes));
 }
 
 
