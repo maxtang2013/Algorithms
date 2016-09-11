@@ -36,12 +36,27 @@ public:
         
         if (fast == NULL || slow == NULL) return NULL;
         
+        //                           ____________________________
+        //                          |                            |
+        //                         \|/                           |
+        //  head --> n1 --> ... --> c0 --> ... --> cj --> ... --> ce
+        //  \_______   L __________/
+        //
+        //  If pointer 'fast' and pointer 'slow' meets at 'cj' after k steps, it needs L steps to move 'slow' from 'head' to 'c0',
+        //  it needs x steps to move pointer 'slow' from 'c0' to 'cj', then we have
+        //    (1)     L + x = k
+        //    (2)     L + x + R = k * 2, R is length of the cycle.
+        //  We can conclude that,
+        //            L = R - x
+        //  Note that it also needs 'R - x' steps to move pointer 'slow' from 'cj' to 'c0'.
+        
         while (slow != head) {
             slow = slow->next;
             head = head->next;
         }
         return head;
-        
+
+//        // My original O(n^2) solution.
 //        while (true) {
 //            if (fast == slow) slow = slow->next;
 //            
