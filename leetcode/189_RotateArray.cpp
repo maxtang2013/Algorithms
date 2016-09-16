@@ -17,7 +17,20 @@ T gcd(T m, T n) {
 
 class Solution {
 public:
+    
+    // Three reverses.
     void rotate(vector<int>& nums, int k) {
+        int n = nums.size();
+        if (n == 0 || (k = k%n) == 0) return;
+        
+        reverse(nums.begin(), nums.begin() + n-k);
+        
+        reverse(nums.begin()+n-k, nums.end());
+        
+        reverse(nums.begin(), nums.end());
+    }
+    
+    void rotate1(vector<int>& nums, int k) {
         int n = nums.size();
         if (n == 0) return;
         
@@ -71,7 +84,7 @@ void Test0()
 void Test2()
 {
     Solution sln;
-    vector<int> nums = {1, 2, 3,4, 5, 6,7, 8};
+    vector<int> nums = {1, 2, 3, 4, 5, 6,7, 8};
     sln.rotate(nums, 3);
     printVector(nums);
 }
