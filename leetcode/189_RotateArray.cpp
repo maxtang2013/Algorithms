@@ -18,8 +18,29 @@ T gcd(T m, T n) {
 class Solution {
 public:
     
-    // Three reverses.
     void rotate(vector<int>& nums, int k) {
+        int n = nums.size();
+        int s = 0;
+        
+        for (; (k = k%n); n -= k, s += k)
+        {
+            // Swap the last k elements with the first k elements.
+            // The last k elements will be in the correct positions
+            // but we need to rotate the remaining (n - k) elements
+            // to the right by k steps.
+            for (int i = 0; i < k; i++)
+            {
+                swap(nums[s+i], nums[n - k + s+i]);
+            }
+//            for (int i = 0; i < nums.size(); ++i) {
+//                cout << nums[i] << " ";
+//            }
+//            cout << "==>" << endl;
+        }
+    }
+    
+    // Three reverses.
+    void rotate_rev(vector<int>& nums, int k) {
         int n = nums.size();
         if (n == 0 || (k = k%n) == 0) return;
         
