@@ -9,22 +9,25 @@ using namespace std;
 class Solution {
 public:
     string shortestPalindrome(string s) {
-        
         if (s.empty()) return s;
         
         getNext(s);
         
         int i = 0, j = (int) s.length() - 1;
         
-        while (j > i*2) {
-            if (s[i] == s[j-i]) ++i;
-            else {
-                j = j - (i - next[i]);
-                i = next[i] == -1 ? 0 : next[i];
+        while (j > i) {
+            if (i == -1 || s[i] == s[j]) {
+                --j;
+                ++i;
+            } else {
+                i = next[i];
             }
         }
         
-        string t = s.substr(j + 1);
+        if (i == j) j = i * 2 + 1;
+        else j = i * 2;
+        
+        string t = s.substr(j);
         reverse(t.begin(), t.end());
         
         return t + s;
@@ -51,8 +54,8 @@ private:
 void Test0()
 {
     Solution sln;
-    cout << sln.shortestPalindrome("abcd") << endl;
-    cout << sln.shortestPalindrome("") << endl;
+//    cout << sln.shortestPalindrome("abcd") << endl;
+//    cout << sln.shortestPalindrome("") << endl;
     cout << sln.shortestPalindrome("aacecaaa") << endl;
 }
 
