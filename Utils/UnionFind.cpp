@@ -15,13 +15,15 @@ public:
         delete []sz;
     }
     
-    public boolean find(int p, int q) {
+    bool find(int p, int q) {
         return root(p) == root(q);
     }
     
-    public void unite(int p, int q) {
+    void unite(int p, int q) {
         int i = root(p);
         int j = root(q);
+        
+        if (i == j) return;
         
         if (sz[i] > sz[j]) {
             id[j] = i;
@@ -31,11 +33,15 @@ public:
             sz[j] += sz[i];
         }
     }
-
+    
+    int getSize(int i) {
+        int r = root(i);
+        return sz[r];
+    }
     
 private:
     
-    private int root(int i) {
+    int root(int i) {
         while (i != id[i]) {
             id[i] = id[id[i]];
             i = id[i];
@@ -47,4 +53,4 @@ private:
     
     int* id;
     int* sz;
-}
+};
