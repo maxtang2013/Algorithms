@@ -5,178 +5,121 @@
 
 using namespace std;
 
-template<class T>
-T gcd(T m, T n) {
-    if (m < n) return gcd(n, m);
-    
-    if (n == 0) return m;
-    
-    return gcd(n, m%n);
-}
-
-struct Entry {
-    int x, y;
-    int val;
-};
-
-struct Comparator {
-    bool operator()(const Entry& e1, const Entry& e2)
-    {
-        return e1.val > e2.val;
-    }
-};
-// priority_queue<Entry, vector<Entry>, Comparator> Q;
-
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
-struct TreeNodeItem {
-    TreeNode* node;
-    int level;
-};
-
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-
-
 class Solution {
 public:
+    // Given a 2D binary matrix filled with 0's and 1's,
+    // find the largest square containing only 1's and return its area.
+    
+    int maximalSquare(vector<vector<char>>& matrix) {
+        if (matrix.empty()) return 0;
+        int m = (int) matrix.size();
+        int n = (int) matrix[0].size();
+        int ans = 0;
+        int prev = 0;
+        vector<int> maxSquareLen(n+1);
+        
+        for (int i = 1; i <= m; ++i) {
+            prev = 0;
+            for (int j = 1; j <= n; ++j) {
+                int tmp = maxSquareLen[j];
+                if (matrix[i-1][j-1] == '1') {
+                    maxSquareLen[j] = min(maxSquareLen[j], min(maxSquareLen[j-1], prev)) + 1;
+                    ans = max(ans, maxSquareLen[j]);
+                } else {
+                    // It's neccesary to do this here!!!
+                    maxSquareLen[j] = 0;
+                }
+                prev = tmp;
+            }
+        }
+        return ans * ans;
+    }
+    
+    // A O(m * n) solutioin.
+    // We can reduce the memory usage to O(n).
+    int maximalSquare_Mine(vector<vector<char>>& matrix) {
+        if (matrix.empty()) return 0;
+        int m = (int) matrix.size();
+        int n = (int) matrix[0].size();
+        int ans = 0;
+        vector<vector<int>> maxSquareLen(m);
+        vector<int> upper(n, -1);
+        
+        for (int i = 0; i < m; ++i)
+            maxSquareLen[i].resize(n);
+        
+        for (int i = 0; i < m; ++i) {
+            int left = -1;
+            for (int j = 0; j < n; ++j) {
+                if (matrix[i][j] == '0') {
+                    left = j;
+                    upper[j] = i;
+                    continue;
+                }
+                
+                if (i > 0 && j > 0) {
+                    int l = maxSquareLen[i-1][j-1];
+                    
+                    l = min(l+1, j-left);
+                    l = min(l, i - upper[j]);
+                    maxSquareLen[i][j] = l;
+                } else {
+                    maxSquareLen[i][j] = 1;
+                }
+                
+                ans = max(ans, maxSquareLen[i][j]);
+            }
+        }
+        return ans * ans;
+    }
+    
+    // O(m * n * min(m, n))
+    int maximalSquare_O_N_3(vector<vector<char>>& matrix) {
+        if (matrix.empty()) return 0;
+        int m = (int) matrix.size();
+        int n = (int) matrix[0].size();
+        int ans = 0;
+        vector<vector<int>> maxSquareLen(m);
+        
+        for (int i = 0; i < m; ++i)
+            maxSquareLen[i].resize(n);
+        
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (matrix[i][j] == '0') {
+                    continue;
+                }
+                
+                if (i > 0 && j > 0) {
+                    int l = maxSquareLen[i-1][j-1];
+                    
+                    int k = 1;
+                    for (; k <= l; ++k) {
+                        if (matrix[i-k][j] == '0' || matrix[i][j-k] == '0') break;
+                    }
+                    maxSquareLen[i][j] = k;
+                } else {
+                    maxSquareLen[i][j] = 1;
+                }
+                
+                ans = max(ans, maxSquareLen[i][j]);
+            }
+        }
+        return ans * ans;
+    }
+
 };
-
-template<typename T>
-void printVector(const vector<T>& list)
-{
-    int len = list.size();
-    for (int i = 0; i < len; ++i)
-    {
-        std::cout << list[i];
-        if (i < len - 1) std::cout << " ";
-        else std::cout << "\n";
-    }
-    cout << endl;
-}
-template <typename T>
-void printBoard(const vector<vector<T>>& board) {
-    int n = (int)board.size();
-    for (int i = 0; i < n; ++i) {
-        int m = (int)board[i].size();
-        for (int j = 0; j < m; ++j) {
-            cout << board[i][j];
-            if (j < m - 1) cout << " ";
-            else cout << endl;
-        }
-    }
-    cout << endl;
-}
-
-void printfLinkedList(ListNode* head) {
-    while (head != NULL) {
-        cout << head->val << " ";
-        head = head->next;
-    }
-    cout << endl;
-}
-
-
-int getLastBit(int n)
-{
-    //    Equavilent:
-    //    int mask = 0;
-    //    for (i = 0; i < 32; ++i)
-    //    {
-    //        mask = 1 << i;
-    //        if (bits & mask)
-    //        {
-    //            break;
-    //        }
-    //    }
-    //    return mask;
-    
-    return n & (-n);
-}
-
-void printBits(int n)
-{
-//    for (int i = 31; i >= 0; --i)
-//    {
-//        if (n & (1<<i)) std::cout << "1";
-//        else std::cout << "0";
-//    }
-//    std::cout << "\n";
-    
-    std::bitset<32> bits(n);
-    std::cout << bits << "\n";
-}
-
-int countBits(int n)
-{
-    int cnt = 0;
-    while (n)
-    {
-        ++cnt;
-        n = n & (n - 1);
-    }
-    return cnt;
-}
-
-vector<vector<int>> levelOrder(TreeNode* root) {
-    vector<vector<int>> ans;
-    if (root == NULL) return ans;
-    
-    vector<TreeNodeItem> S;
-    TreeNodeItem item = {root, 0};
-    S.push_back(item);
-    while (!S.empty()) {
-        item = S.back();
-        S.pop_back();
-        
-        if (item.level >= ans.size()) {
-            ans.push_back(vector<int>());
-        }
-        ans[item.level].push_back(item.node->val);
-        
-        if (item.node->right != NULL) {
-            TreeNodeItem item1 = {item.node->right, item.level + 1};
-            S.push_back(item1);
-        }
-        if (item.node->left != NULL) {
-            TreeNodeItem item1 = {item.node->left, item.level + 1};
-            S.push_back(item1);
-        }
-    }
-    return ans;
-}
-
-void TreeNodeTest()
-{
-    Solution sln;
-    
-    //        1
-    //    2      3
-    //  4   5  6   7
-    //8
-    
-    TreeNode nodes[] = {1, 2, 3, 4, 5, 6,7 ,8};
-    int len = sizeof(nodes) / sizeof(TreeNode);
-    for (int i = 0; i < len; ++i) {
-        if (i * 2 + 1 < len)
-            nodes[i].left = nodes + (i*2+1);
-        if (i*2+2<len)
-            nodes[i].right = nodes + (i*2+2);
-    }
-}
 
 void Test0()
 {
     Solution sln;
-    
+    vector<vector<char>> m = {
+        {'1','0','1','0','0'},
+        {'1','0','1','1','1'},
+        {'1','1','1','1','1'},
+        {'1','0','0','1','0'}
+    };
+    cout << sln.maximalSquare(m) << endl;
 }
 
 int main()
