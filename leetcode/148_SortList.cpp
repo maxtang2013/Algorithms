@@ -59,7 +59,7 @@ public:
             merged = false;
             
             while (nextPair != NULL) {
-                ListNode* secondList = nextPair, *firstList = nextPair;
+                ListNode* secondList, *firstList = nextPair;
                 ListNode* tail;
                 
                 // find the tail of the first list to merge.
@@ -96,8 +96,7 @@ public:
             }
             
             if (newHead != NULL) head = newHead;
-            // cout << "Round: "<< len <<  endl;
-            printfLinkedList(head);
+            
             len = len << 1;
         }
         

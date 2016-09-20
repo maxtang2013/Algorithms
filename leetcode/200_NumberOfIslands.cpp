@@ -86,5 +86,7 @@ int main()
 {
     Test0();
     
+    cout << (1<<30) << endl;
+    
     return 0;
 }

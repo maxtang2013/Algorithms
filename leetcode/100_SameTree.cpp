@@ -1,0 +1,40 @@
+#include <iostream>
+#include <vector>
+#include <bitset>
+#include <queue>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (p == q) return true;
+        
+        if (p == NULL) return q == NULL;
+        if (q == NULL) return p == NULL;
+        
+        if (p->val != q->val) return false;
+        
+        return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+    }
+};
+
+void Test0()
+{
+    Solution sln;
+}
+
+int main()
+{
+    Test0();
+    
+    return 0;
+}

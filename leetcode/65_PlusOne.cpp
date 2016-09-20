@@ -5,36 +5,33 @@
 
 using namespace std;
 
-struct Entry {
-    int x, y;
-    int val;
-};
-
-struct Comparator {
-    bool operator()(const Entry& e1, const Entry& e2)
-    {
-        return e1.val > e2.val;
-    }
-};
-// priority_queue<Entry, vector<Entry>, Comparator> Q;
-
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
 
 
 class Solution {
 public:
-
+    vector<int> plusOne(vector<int>& digits) {
+        int carry = 1;
+        int n = (int) digits.size();
+        int i = n - 1;
+        int d = 0;
+        
+        while (carry > 0 && i >= 0) {
+            d = digits[i] + 1;
+            if (d > 9){
+                d -= 10;
+                carry = 1;
+            } else {
+                carry = 0;
+            }
+            digits[i] = d;
+            --i;
+        }
+        
+        if (carry > 0) {
+            digits.insert(digits.begin(), 1);
+        }
+        return digits;
+    }
 };
 
 template<typename T>
@@ -49,78 +46,25 @@ void printVector(const vector<T>& list)
     }
     cout << endl;
 }
-template <typename T>
-void printBoard(const vector<vector<T>>& board) {
-    int n = (int)board.size();
-    for (int i = 0; i < n; ++i) {
-        int m = (int)board[i].size();
-        for (int j = 0; j < m; ++j) {
-            cout << board[i][j];
-            if (j < m - 1) cout << " ";
-            else cout << endl;
-        }
-    }
-    cout << endl;
-}
-
-void printfLinkedList(ListNode* head) {
-    while (head != NULL) {
-        cout << head->val << " ";
-        head = head->next;
-    }
-    cout << endl;
-}
-
-
-int getLastBit(int n)
-{
-    //    Equavilent:
-    //    int mask = 0;
-    //    for (i = 0; i < 32; ++i)
-    //    {
-    //        mask = 1 << i;
-    //        if (bits & mask)
-    //        {
-    //            break;
-    //        }
-    //    }
-    //    return mask;
-    
-    return n & (-n);
-}
-
-void printBits(int n)
-{
-//    for (int i = 31; i >= 0; --i)
-//    {
-//        if (n & (1<<i)) std::cout << "1";
-//        else std::cout << "0";
-//    }
-//    std::cout << "\n";
-    
-    std::bitset<32> bits(n);
-    std::cout << bits << "\n";
-}
-
-int countBits(int n)
-{
-    int cnt = 0;
-    while (n)
-    {
-        ++cnt;
-        n = n & (n - 1);
-    }
-    return cnt;
-}
 
 void Test0()
 {
     Solution sln;
+    vector<int> digits = {9, 9};
+    
+    printVector(sln.plusOne(digits));
 }
 
+void Test1() {
+    Solution sln;
+    vector<int> digits = {0};
+    
+    printVector(sln.plusOne(digits));
+}
 int main()
 {
     Test0();
+    Test1();
     
     return 0;
 }

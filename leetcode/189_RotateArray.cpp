@@ -32,10 +32,11 @@ public:
             {
                 swap(nums[s+i], nums[n - k + s+i]);
             }
-//            for (int i = 0; i < nums.size(); ++i) {
-//                cout << nums[i] << " ";
-//            }
-//            cout << "==>" << endl;
+            
+            // If n - k < k
+            //     a0, ..., a(n-k), ..., a(k-1), ..., a(n-1)
+            // --> a(n-k), ..., an,
+            
         }
     }
     

@@ -61,18 +61,18 @@ public:
                 } else if (y0 == points[j].y) {
                     ++pointsOnHorizontalLine;
                 } else {
-int A = points[j].y - y0;
-int B = points[j].x - x0;
-int g = gcd(abs(A), abs(B));
-A /= g;
-B /= g;
-if (A < 0) {
-    A = -A;
-    B = -B;
-}
-ostringstream str;
-str << A << "," << B;
-localMax = max(localMax, ++pointsOnLine[str.str()]);
+                    int A = points[j].y - y0;
+                    int B = points[j].x - x0;
+                    int g = gcd(abs(A), abs(B));
+                    A /= g;
+                    B /= g;
+                    if (A < 0) {
+                        A = -A;
+                        B = -B;
+                    }
+                    ostringstream str;
+                    str << A << "," << B;
+                    localMax = max(localMax, ++pointsOnLine[str.str()]);
                 }
             }
             localMax = max(localMax, pointsOnHorizontalLine);
