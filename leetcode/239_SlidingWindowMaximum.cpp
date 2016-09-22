@@ -13,10 +13,7 @@ public:
         vector<int> ans;
         deque<int> Q;
         
-        Q.push_back(0);
-        if (k == 1) ans.push_back(nums[0]);
-        
-        for (int i = 1; i < n; ++i) {
+        for (int i = 0; i < n; ++i) {
             while (!Q.empty() && nums[Q.back()] <= nums[i]) {
                 Q.pop_back();
             }
@@ -26,7 +23,7 @@ public:
             if (Q.front() + k <= i) Q.pop_front();
             
             if (i >= k - 1) {
-                ans.push_back(max(nums[Q.front()], nums[Q.back()]));
+                ans.push_back(nums[Q.front()]);
             }
         }
         
