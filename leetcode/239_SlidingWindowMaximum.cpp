@@ -11,23 +11,22 @@ public:
         if (nums.empty()) return nums;
         int n = (int) nums.size();
         vector<int> ans;
-        deque<pair<int,int>> Q;
-        pair<int, int> p(-1, INT_MIN);
+        deque<int> Q;
         
-        Q.push_back(make_pair(0, nums[0]));
+        Q.push_back(0);
         if (k == 1) ans.push_back(nums[0]);
         
         for (int i = 1; i < n; ++i) {
-            while (!Q.empty() && Q.back().second <= nums[i]) {
+            while (!Q.empty() && nums[Q.back()] <= nums[i]) {
                 Q.pop_back();
             }
             
-            Q.push_back(make_pair(i, nums[i]));
+            Q.push_back(i);
             
-            if (Q.front().first + k <= i) Q.pop_front();
+            if (Q.front() + k <= i) Q.pop_front();
             
             if (i >= k - 1) {
-                ans.push_back(max(Q.front().second, Q.back().second));
+                ans.push_back(max(nums[Q.front()], nums[Q.back()]));
             }
         }
         
