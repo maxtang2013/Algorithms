@@ -13,6 +13,8 @@ struct ListNode {
 
 void printfLinkedList(ListNode* head);
 
+
+// Sort a linked list in O(n log n) time using constant space complexity.
 class Solution {
 public:
     
