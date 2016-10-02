@@ -1,10 +1,28 @@
 #include <vector>
 using namespace std;
 
-class Solution 
+//Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive), prove that at least one duplicate number must exist. Assume that there is only one duplicate number, find the duplicate one.
+class Solution
 {
 public:
-    int findDuplicate(vector<int>& nums)
+    
+    int findDuplicate(vector<int>& nums) {
+        int n = nums.size();
+        int fast = 0, slow = 0;
+        do {
+            fast = nums[nums[fast]];
+            slow = nums[slow];
+        } while (fast != slow);
+        
+        fast = 0;
+        while (fast != slow) {
+            fast = nums[fast];
+            slow = nums[slow];
+        }
+        return slow;
+    }
+    
+    int findDuplicate_binarySearch(vector<int>& nums)
     {                    
         int start = 1, end = nums.size() - 1;
         int mid;
